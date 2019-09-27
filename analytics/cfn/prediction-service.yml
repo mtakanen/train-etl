@@ -1,0 +1,60 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Description: A stack that provides Train Prediction service with API and 
+             ability to read a DynamoDB table.
+
+Globals:
+  Function:
+    Runtime: python3.7
+    MemorySize: 128
+  Api:
+    Cors:
+      AllowMethods: "'*'"
+      AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+      AllowOrigin: "'*'"
+
+Resources:
+  TrainPredictionApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: test
+
+  # An IAM policy that permits Lambda funciton to read a DynamoDB table.
+  TrainPredictionFunctionPolicy:
+    Type: 'AWS::IAM::ManagedPolicy'
+    Properties:
+      ManagedPolicyName: TrainPredictionPolicy
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+                - 'dynamodb:Scan'
+                - 'dynamodb:Query'
+            Resource: 'arn:aws:dynamodb:*:*:table/TrainArrivals*'
+
+  TrainPredictionFunction:
+    DependsOn:
+      - TrainPredictionFunctionPolicy
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: prediction.predict
+      CodeUri: ..
+      Description: >-
+        A microservice backend that provides train arrival predictions.
+      Timeout: 30
+      Policies:
+        - !Ref TrainPredictionFunctionPolicy
+      Events:
+        PredictionsApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref TrainPredictionApi
+            Path: /prediction
+            Method: GET
+
+Outputs:
+  TrainPredictionApi:
+    Description: The endpoint for the REST API created with API Gateway
+    Value: !Join ['', ['https://', !Ref 'TrainPredictionApi',  '.execute-api.', !Ref 'AWS::Region', '.amazonaws.com/test']]

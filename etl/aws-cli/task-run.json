@@ -1,0 +1,20 @@
+{
+    "cluster": "TrainETL",
+    "taskDefinition": "train-etl",
+    "launchType": "FARGATE",
+    "platformVersion": "LATEST",
+    "networkConfiguration": {
+        "awsvpcConfiguration": {
+            "subnets": ["REPLACE_ME_SUBNET_NAME"],
+            "assignPublicIp": "ENABLED"
+        }
+    }
+    ,
+    "overrides": {
+        "containerOverrides": [ 
+        {
+            "name": "TrainETL-Container",
+            "command": ["--train_number=8324", "--weeks=10"]
+        }]
+    }
+}

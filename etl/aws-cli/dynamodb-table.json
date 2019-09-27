@@ -1,0 +1,31 @@
+{
+    "TableName": "TrainArrival",
+
+    "KeySchema": [
+        {
+            "AttributeName": "TrainStation",
+            "KeyType": "HASH"
+        },
+        {
+            "AttributeName": "ScheduledTime",
+            "KeyType": "RANGE"
+        }
+
+    ],
+
+    "AttributeDefinitions": [
+        {
+            "AttributeName": "TrainStation",
+            "AttributeType": "S"
+        },
+        {
+            "AttributeName": "ScheduledTime",
+            "AttributeType": "S"
+        }
+    ],
+
+    "ProvisionedThroughput": {
+        "ReadCapacityUnits": 2,
+        "WriteCapacityUnits": 2
+    }
+}

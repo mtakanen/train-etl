@@ -1,0 +1,29 @@
+{
+  "family": "trainetlcli",
+  "cpu": "256",
+  "memory": "512",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "executionRoleArn": "arn:aws:iam::AWS_ACCOUNT_ID:role/TrainETLStack-EcsServiceRole-1CA7H5EZ9YSYI",
+  "taskRoleArn": "arn:aws:iam::AWS_ACCOUNT_ID:role/TrainETLStack-ECSTaskRole-ZHUWXQ5GKF7H",
+  "containerDefinitions": [
+    {
+      "name": "TrainETL-CLI",
+      "image": "AWS_ACCOUNT_ID.dkr.ecr.AWS_REGION.amazonaws.com/trainetl/cli:latest",
+      "entryPoint": ["python", "etl.py", "5"],
+      "cpu": 256,
+      "memory": 512,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "trainetl-logs",
+          "awslogs-region": "AWS_REGION",
+          "awslogs-stream-prefix": "awslogs-trainetl-service"
+        }
+      },
+      "essential": true
+    }
+  ]
+}
