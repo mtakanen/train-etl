@@ -1,6 +1,6 @@
 # Serverless ETL
 
-ETL task reads train arrival data from <https://www.digitraffic.fi/rautatieliikenne/> API and stores records to a DynamoDB table. ETL application is written in Python, packaged as Docker image and run with AWS Fargate. AWS infra was inspired by [this article] (https://www.lewuathe.com/simple-etl-running-on-docker-and-ecs.html).
+ETL task reads train arrival data from <https://www.digitraffic.fi/rautatieliikenne/> API and stores records to a DynamoDB table. ETL application is written in Python, packaged as Docker image and run with AWS Fargate. AWS infra was inspired by [this article](https://www.lewuathe.com/simple-etl-running-on-docker-and-ecs.html).
 
 AWS services used:
 
