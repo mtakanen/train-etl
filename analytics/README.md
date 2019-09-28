@@ -1,6 +1,6 @@
-# Serverless train arrival time predictions
+# Train arrival time predictions
 
-Reads historical train arrival data from DynamoDB table and makes simple prediction of arrival time based on given train and station. 
+Lambda function reads historical train arrival data from a DynamoDB table and makes simple prediction of arrival time for given train and station. 
 
 AWS services used:
 
@@ -38,21 +38,20 @@ $ aws s3 cp function.zip s3://$BUCKET_ARTIFACTS
 
 ### Python dependencies
 
-Lambda function depends on Pandas library that comes with compiled cPython libraries that are platform specific. AWS Lambda runs on Linux (AMI 2). Compiled binaries *-manylinux1_x86_64.whl can be found from pypi.org
-Download and extract zip files to directory `python/`. E.g.
+Lambda function depends on Pandas library that is compute optimized with cPython code compiled to runtime platform. AWS Lambda runs on Linux (AMI 2). Download binaries *-manylinux1_x86_64.whl from <pypi.org> and extract files to directory `python/`. E.g.
 
 ```bash
 $ mkdir dependencies/python
 $ unzip ~/Downloads/pandas-0.25.1-cp37-cp37m-manylinux1_x86_64.whl -d dependencies/python
 ```
 
-Pandas also depends on `numpy` and `pytz`. In addition, prediction.py depends on `dateutil`. Download those as well! When all dependencies are unzipped in direcotory `python` compress directory:
+Pandas depends on `numpy` and `pytz`. In addition, prediction.py depends on `dateutil`. Download those as well. When all dependencies are unzipped in direcotory `python` compress directory:
 
 ```bash
 $ zip dependencies-37m-x86_64-linux-gnu.zip -r python/
 ```
 
-Finally, copy depencies to s3 bucket:
+Finally, copy depencies to s3:
 
 ```bash
 $ aws s3 cp dependencies/dependencies-37m-x86_64-linux-gnu.zip s3://$BUCKET_DEPENDENCIES
@@ -68,11 +67,11 @@ $ terraform apply -var="region=$AWS_REGION" -var="s3_bucket_artifacts=$BUCKET_AR
 
 Altenatively, build infra with Cloudformation. See [cfn/README.md](cfn/README.md) for details.
 
-## Test
+## Test prediction
 
 Terraform will print service_url when infra stack is created.
 
-Request url with query parameters `train_number` and `station` e.g.
+Request url with query parameters `train_number` and `station`, e.g.
 
 ```bash
 $ curl "https://22lnyrpbci.execute-api.eu-west-1.amazonaws.com/test/prediction?train_number=8574&station=HKI"
