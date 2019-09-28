@@ -1,6 +1,6 @@
 # Serverless train arrival ETL and predictions
 
-Do trains in Finland run on schudule? Predict arrival time of a train at a station based on historical data available via <https://www.digitraffic.fi/rautatieliikenne/>.
+Do trains in Finland run on schudule? Application predicts arrival time of a train at a station based on historical data available via <https://www.digitraffic.fi/rautatieliikenne/>.
 
 AWS services used:
 
