@@ -1,9 +1,12 @@
 {
     "TableName": "TrainArrival",
-
+    "ProvisionedThroughput": {
+        "ReadCapacityUnits": 2,
+        "WriteCapacityUnits": 2
+    },
     "KeySchema": [
         {
-            "AttributeName": "TrainStation",
+            "AttributeName": "TrainStationKey",
             "KeyType": "HASH"
         },
         {
@@ -12,20 +15,64 @@
         }
 
     ],
-
     "AttributeDefinitions": [
         {
-            "AttributeName": "TrainStation",
+            "AttributeName": "TrainStationKey",
             "AttributeType": "S"
         },
         {
             "AttributeName": "ScheduledTime",
             "AttributeType": "S"
+        },
+        {
+            "AttributeName": "StationShortCode",
+            "AttributeType": "S"
+        },
+        {
+            "AttributeName": "DifferenceInMinutes",
+            "AttributeType": "N"
         }
     ],
-
-    "ProvisionedThroughput": {
-        "ReadCapacityUnits": 2,
-        "WriteCapacityUnits": 2
-    }
+    "GlobalSecondaryIndexes": [
+        {
+            "IndexName": "StationIndex",
+            "KeySchema": [
+                {
+                "AttributeName": "StationShortCode",
+                "KeyType": "HASH"
+                },
+                {
+                    "AttributeName": "ScheduledTime",
+                    "KeyType": "RANGE"
+                }
+            ],
+            "Projection": {
+                "ProjectionType": "ALL"
+            },
+            "ProvisionedThroughput": {
+                "ReadCapacityUnits": 2,
+                "WriteCapacityUnits": 2
+            }
+            },
+            {
+                "IndexName": "DifferenceIndex",
+                "KeySchema": [
+                {
+                    "AttributeName": "DifferenceInMinutes",
+                    "KeyType": "HASH"
+                },
+                {
+                    "AttributeName": "ScheduledTime",
+                    "KeyType": "RANGE"
+                }
+                ],
+                "Projection": {
+                "ProjectionType": "ALL"
+                },
+                "ProvisionedThroughput": {
+                "ReadCapacityUnits": 2,
+                "WriteCapacityUnits": 2
+                }
+        }
+    ]
 }

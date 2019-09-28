@@ -65,7 +65,7 @@ class ETL():
         db = DynamoDB()
         for item in items:
             pk = f"{train_number}-{item['StationShortCode']}"
-            item['TrainStation'] = pk
+            item['TrainStationKey'] = pk
 
         db.batch_write('TrainArrival', items)
         return len(list(items))

@@ -3,4 +3,5 @@
 .terraform
 *.tfstate*
 *.zip
+*-checkpoint.ipynb
 venv/*
