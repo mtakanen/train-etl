@@ -5,7 +5,7 @@
     "platformVersion": "LATEST",
     "networkConfiguration": {
         "awsvpcConfiguration": {
-            "subnets": ["REPLACE_ME_SUBNET_NAME"],
+            "subnets": ["subnet-068a97a8ee27e38e1"],
             "assignPublicIp": "ENABLED"
         }
     }
