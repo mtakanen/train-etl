@@ -55,14 +55,14 @@
             }
             },
             {
-                "IndexName": "DifferenceIndex",
-                "KeySchema": [
+                "IndexName": "TrainArrivalDifferenceIndex",
+                "KeySchema": [ 
                 {
-                    "AttributeName": "DifferenceInMinutes",
+                    "AttributeName": "TrainStationKey",
                     "KeyType": "HASH"
                 },
                 {
-                    "AttributeName": "ScheduledTime",
+                    "AttributeName": "DifferenceInMinutes",
                     "KeyType": "RANGE"
                 }
                 ],
