@@ -10,6 +10,7 @@ TRAINS_API_URL = 'https://rata.digitraffic.fi/api/v1/trains/'
 API_DATE_FORMAT = '%Y-%m-%d'
 CANCELLED_PENALTY = 30
 DEFAULT_REGION = 'eu-west-1'
+ARRIVAL_TABLE_NAME = 'TrainArrival'
 
 logger = logging.getLogger(__name__)
 
@@ -67,7 +68,7 @@ class ETL():
             pk = f"{train_number}-{item['StationShortCode']}"
             item['TrainStation'] = pk
 
-        db.batch_write('TrainArrival', items)
+        db.batch_write(ARRIVAL_TABLE_NAME, items)
         return len(list(items))
 
 

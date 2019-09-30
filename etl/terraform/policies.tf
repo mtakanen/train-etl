@@ -24,7 +24,7 @@ data "aws_iam_policy_document" "ecs_task_policy" {
             "dynamodb:BatchWriteItem"
         ]
         resources = [
-            "arn:aws:dynamodb:*:*:table/TrainArrivals*"
+            "arn:aws:dynamodb:*:*:table/TrainArrival"
         ]
     }
 }
