@@ -1,5 +1,3 @@
-
-
 variable "cluster-name" {
   default = "TrainETL"
   type    = "string"
@@ -15,16 +13,16 @@ provider "aws" {
 }
 
 # Networking
-data "aws_availability_zones" "available" {}
+data "aws_availability_zones" "available" {
+}
 
 resource "aws_vpc" "vpc" {
     cidr_block = "10.0.0.0/16"
 }
 
 resource "aws_subnet" "subnet" {
-  count = 1
-  availability_zone = "${data.aws_availability_zones.available.names[count.index]}"
-  cidr_block        = "10.0.${count.index}.0/24"
+  availability_zone = "${data.aws_availability_zones.available.names[0]}"
+  cidr_block        = "10.0.0.0/24"
   vpc_id            = "${aws_vpc.vpc.id}"
 
   tags = "${
@@ -84,7 +82,39 @@ resource "aws_ecs_task_definition" "etl_task_definition" {
     memory = "512"
     network_mode = "awsvpc"
     requires_compatibilities = ["FARGATE"]
-    container_definitions = "${file("container-definitions.json")}"
     execution_role_arn = "${aws_iam_role.ecs_exec_role.arn}"
     task_role_arn = "${aws_iam_role.ecs_task_role.arn}"
+    container_definitions = <<DEFINITION
+[
+  {
+    "name": "TrainETL-Container",
+    "image": "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com/train-etl:latest",
+    "entrypoint": ["python", "etl.py", "--train_number=45", "--weeks=1"],
+    "cpu": 256,
+    "memory": 512,
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "trainetl-logs",
+        "awslogs-region": "${var.region}",
+        "awslogs-stream-prefix": "awslogs-trainetl-service"
+      }
+    },
+    "essential": true
+  }
+]
+DEFINITION
+}
+
+data "aws_caller_identity" "current" {}
+
+output "aws_region" {
+  value = "${var.region}"
+}
+output "account_id" {
+  value = "${data.aws_caller_identity.current.account_id}"
+}
+
+output "subnet" {
+  value = "${aws_subnet.subnet.id}"
 }
