@@ -122,7 +122,7 @@ class DynamoDB(object):
     def query(self, table_name, train_number, target_station):
         key = f'{train_number}-{target_station}'
         response = self.ddb.Table(table_name).query(
-            KeyConditionExpression=Key('TrainStation').eq(key))
+            KeyConditionExpression=Key('TrainStationKey').eq(key))
         return response['Items']
 
     def scan_table(self, table_name, batch_size=1000):
